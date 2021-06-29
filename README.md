@@ -1,5 +1,5 @@
-# GCN-based-CPC
- GCN-based Cloud Points Classification
+# GCN-based-PCC
+**实验存在的问题：**
 
 由于硬件资源的不足，项目的所有试验均依托Google Colab进行计算。
 
@@ -12,3 +12,13 @@ $$
 
 + 公式2中的全1向量$\mathbf{1}$的运算使用的是python的广播机制实现的。
 
+```python
+def knn(X, k):
+    inner_pro = -2*torch.matmul(X.transpose(2, 1), X)
+    X_square = torch.sum(X**2, dim=1, keepdim=True)
+    pairwise_distance = -X_square - inner_pro - X_square.transpose(2, 1)
+    index = pairwise_distance.topk(k=k, dim=-1)[1]
+    return index
+```
+
++ 我认为实验的结果还没有调整到最优(模型还存在一定程度的欠拟合，有提升空间)。由于使用Colab的时长有限制不能短时间内多次调整训练，我只进行了2-3次调参，因此一直没能调整到最优。
